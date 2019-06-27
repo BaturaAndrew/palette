@@ -1,0 +1,87 @@
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  align-items: center;
+
+  color: rgba(0, 0, 0, 0.541327);
+}
+
+* {
+  list-style-type: none;
+  text-decoration: none;
+}
+
+body {
+  min-width: 980px;
+}
+
+.menu {
+  border: 1px solid red;
+
+}
+
+.menu h1 {
+  font-size: 26px;
+  color: black;
+}
+
+.menu h1 i {
+  margin: 0 20px;
+}
+
+.wrapper {
+  border: 1px solid red;
+  margin-top: 100px;
+  display: flex;
+  justify-content: space-between;
+}
+
+
+.pallete,
+.colors {
+  border: 1px solid red;
+  box-shadow: 10px 5px 5px red;
+  margin-left: 40px;
+  width: 228px;
+  height: 246px;
+
+}
+
+.colors {
+  margin-top: 100px;
+}
+
+.canvas {
+  border: 1px solid red;
+  width: 725px;
+  height: 731px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.block {
+  border: 1px solid blue;
+  width: 30%;
+  height: 30%;
+  margin: 1px 1px;
+  background-color: grey;
+}
+
+.pallete li,
+.colors li {
+  margin: 20px 20px;
+}
+
+.pallete li i,
+.colors li i {
+  margin-right: 6px;
+}
