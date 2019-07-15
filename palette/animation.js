@@ -1,65 +1,60 @@
 // icons for cursors
 const bucketCursor = "url(asserts/images/fill-drip-solid.png) 10 10, auto";
-const chooseColorCursor = "url(asserts/images/eye-dropper-solid.png) 10 10, auto";
-const moveCursor = "url(asserts/images/expand-arrows-alt-solid.png) 10 10, auto";
+const colorPickerCursor = "url(asserts/images/eye-dropper-solid.png) 10 10, auto";
+const moveElCursor = "url(asserts/images/expand-arrows-alt-solid.png) 10 10, auto";
 const transferCursor = "url(asserts/images/exchange-alt-solid.png) 10 10, auto";
 
 // blocks
-const canvas = document.querySelector(".canvas");
-const pallete = document.querySelector(".pallete");
-const colors = document.querySelector(".colors");
+const canvasEl = document.querySelector(".canvas");
+const palleteEl = document.querySelector(".pallete");
+const colorsEl = document.querySelector(".colors");
 
 // tools
-const paintBucket = document.querySelector("#paintBucket");
-const chooseColor = document.querySelector("#chooseColor");
-const move = document.querySelector("#move");
-const transform = document.querySelector("#transform");
+const paintBucketEl = document.querySelector("#paintBucket");
+const colorPickerEl = document.querySelector("#colorPicker");
+const moveEl = document.querySelector("#move");
+const transformEl = document.querySelector("#transform");
 
 //  colors
-const currColor = document.querySelector("#curr-color");
-const prevColor = document.querySelector("#prev-color");
-const redColor = document.querySelector("#red-color");
-const blueColor = document.querySelector("#blue-color");
+const currColorEl = document.querySelector("#curr-color");
+const prevColorEl = document.querySelector("#prev-color");
+const redColorEl = document.querySelector("#red-color");
+const blueColorEl = document.querySelector("#blue-color");
 
 
 var curr_color, prev_color;
 color = curr_color = "grey";
 prev_color = "green";
-var tools = {}
-tools.paintBucket = false;
-tools.chooseColor = false;
-tools.move = false;
-tools.transform = false;
+var currentTool = "";
 
 let element;
 
 // events that are triggered when you click on the block of canvas
-canvas.addEventListener('click', e => {
+canvasEl.addEventListener('click', e => {
 
   console.log(e.clientX + ':' + e.clientY);
   // choose figure on canvas
   element = document.elementFromPoint(e.clientX, e.clientY);
 
   //paint over
-  if (tools.paintBucket) {
+  if (currentTool == "paintBucket") {
     // if elem is on canvas
-    if (element.parentElement === canvas) {
+    if (element.parentElement === canvasEl) {
       element.style.backgroundColor = curr_color;
-      console.log(' ', curr_color, ' ', prev_color);
     }
   }
 
   //take the color of the figure 
-  if (tools.chooseColor) {
+  if (currentTool == "colorPicker") {
     // if elem is on canvas
-    if (element.parentElement === canvas) {
+    if (element.parentElement === canvasEl) {
       refreshColor(element.style.backgroundColor);
     }
   }
 
   //!!!!!!!!
   // move
-  if (tools.move) {
+  if (currentTool == "move") {
     var rect = element.getBoundingClientRect()
     var dx = e.pageX - rect.left,
       dy = e.pageY - rect.top
@@ -81,67 +76,59 @@ canvas.addEventListener('click', e => {
 })
 
 // events that are triggered when you click on the block of choosing tools
-pallete.addEventListener('click', e => {
+palleteEl.addEventListener('click', e => {
 
-  if (e.target === paintBucket) {
-    tools.paintBucket = true;
-    document.body.style.cursor = bucketCursor;
-  } else {
-    tools.paintBucket = false;
+  if (e.target === paintBucketEl) {
+    currentTool = "paintBucket"; // change current tool
+    document.body.style.cursor = bucketCursor; // change cursor type
   }
 
-  if (e.target === chooseColor) {
-    tools.chooseColor = true;
-    document.body.style.cursor = chooseColorCursor;
-  } else {
-    tools.chooseColor = false;
+  if (e.target === colorPickerEl) {
+    currentTool = "colorPicker";
+    document.body.style.cursor = colorPickerCursor;
   }
 
-  if (e.target === move) {
-    tools.move = true;
+  if (e.target === moveEl) {
+    currentTool = "move";
     document.body.style.cursor = moveCursor;
-  } else {
-    tools.move = false;
   }
 
-  if (e.target === transform) {
-    tools.transform = true;
+  if (e.target === transformEl) {
+    currentTool = "transform";
     document.body.style.cursor = transferCursor;
-  } else {
-    tools.transform = false;
   }
 
-  if (!tools.paintBucket && !tools.chooseColor && !tools.move && !tools.transform) {
+  if (!currentTool) {
     document.body.style.cursor = "";
   }
 
 })
 
 // events that are triggered when you click on the block of choosing colors
-colors.addEventListener('click', e => {
-  if (tools.chooseColor) {
-    if (e.target === currColor) {
+colorsEl.addEventListener('click', e => {
+  if (currentTool == "colorPicker") {
+    if (e.target === currColorEl) {
       refreshColor(curr_color);
     }
-    if (e.target === prevColor) {
+    if (e.target === prevColorEl) {
       refreshColor(prev_color);
     }
-    if (e.target === redColor) {
+    if (e.target === redColorEl) {
       refreshColor("red");
     }
-    if (e.target == blueColor) {
+    if (e.target == blueColorEl) {
       refreshColor("blue");
     }
   }
 
-  //when you click do the standard cursor and the default action
+  //when you click on color palette do the standard cursor and the default action
   resetAction();
 });
 
 
 // 
-var colorPicker = document.querySelector("#color");
-colorPicker.addEventListener("input", watchColorPicker, false);
+var colorPickerInput = document.querySelector("#color");
+colorPickerInput.addEventListener("input", watchColorPicker, false);
 
 function watchColorPicker(event) {
   refreshColor(event.target.value);
@@ -150,14 +137,14 @@ function watchColorPicker(event) {
 function refreshColor(color) {
   prev_color = curr_color;
   curr_color = color;
-  currColor.childNodes[1].style.backgroundColor = curr_color;
-  prevColor.childNodes[1].style.backgroundColor = prev_color;
+  currColorEl.childNodes[1].style.backgroundColor = curr_color;
+  prevColorEl.childNodes[1].style.backgroundColor = prev_color;
 }
 
 // for now just reset the color choices
 function resetAction() {
-  if (tools.chooseColor) {
-    tools.chooseColor = false;
+  if (currentTool == "colorPicker") {
+    currentTool == "";
     document.body.style.cursor = "";
   }
 }
