@@ -4,14 +4,13 @@
   box-sizing: inherit;
 }
 
-body {
 
+body {
+  align-items: center;
   font-family: Roboto;
   font-style: normal;
   font-weight: normal;
   font-size: 16px;
-  align-items: center;
-
   color: rgba(0, 0, 0, 0.541327);
 }
 
@@ -21,12 +20,11 @@ body {
 }
 
 body {
-  min-width: 980px;
+  min-width: 1050px;
 }
 
 .menu {
-  border: 1px solid red;
-
+  margin-top: 30px;
 }
 
 .menu h1 {
@@ -39,21 +37,17 @@ body {
 }
 
 .wrapper {
-  border: 1px solid red;
   margin-top: 100px;
   display: flex;
   justify-content: space-between;
 }
 
-
 .pallete,
 .colors {
-  border: 1px solid red;
   box-shadow: 10px 5px 5px red;
   margin-left: 40px;
   width: 228px;
   height: 246px;
-
 }
 
 .colors {
@@ -63,6 +57,8 @@ body {
 .canvas {
   border: 1px solid red;
   width: 725px;
+  /* width: 100%; */
+  /* margin-left: 50px; */
   height: 731px;
   display: flex;
   flex-wrap: wrap;
@@ -70,8 +66,9 @@ body {
 
 .block {
   border: 1px solid blue;
-  width: 30%;
-  height: 30%;
+  position: relative;
+  width: 220px;
+  height: 220px;
   margin: 1px 1px;
   background-color: grey;
 }
@@ -84,4 +81,37 @@ body {
 .pallete li i,
 .colors li i {
   margin-right: 6px;
+}
+
+li:hover {
+  background-color: lavender;
+}
+
+.pallete li:hover {
+  cursor: pointer;
+}
+
+.circle {
+  width: 13px;
+  height: 13px;
+  border: 1px solid black;
+  border-radius: 13px;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.curr-color {
+  background-color: grey;
+}
+
+.prev-color {
+  background-color: green;
+}
+
+.red-color {
+  background-color: red;
+}
+
+.blue-color {
+  background-color: blue;
 }
