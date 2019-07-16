@@ -44,6 +44,8 @@ body {
 
 .pallete,
 .colors {
+  border-left: 1px solid red;
+  border-top: 1px solid red;
   box-shadow: 10px 5px 5px red;
   margin-left: 40px;
   width: 228px;
@@ -58,10 +60,10 @@ body {
   border: 1px solid red;
   width: 725px;
   /* width: 100%; */
-  /* margin-left: 50px; */
+  margin-left: 50px;
   height: 731px;
-  display: flex;
-  flex-wrap: wrap;
+  /* display: flex; */
+  /* flex-wrap: wrap; */
 }
 
 .block {
@@ -71,11 +73,19 @@ body {
   height: 220px;
   margin: 1px 1px;
   background-color: grey;
+  /* display: inline-block; */
+  float: left;
+  z-index: 10;
 }
 
 .pallete li,
 .colors li {
   margin: 20px 20px;
+}
+
+.pallete li:first-child,
+.colors li:first-child {
+  margin-top: 50px;
 }
 
 .pallete li i,
@@ -87,7 +97,8 @@ li:hover {
   background-color: lavender;
 }
 
-.pallete li:hover {
+.pallete li:hover,
+.colors li:hover {
   cursor: pointer;
 }
 
@@ -101,7 +112,7 @@ li:hover {
 }
 
 .curr-color {
-  background-color: grey;
+  background-color: #00ff37;
 }
 
 .prev-color {
@@ -114,4 +125,8 @@ li:hover {
 
 .blue-color {
   background-color: blue;
+}
+
+.transform-to-circle {
+  border-radius: 999px;
 }

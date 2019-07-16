@@ -1,13 +1,13 @@
 // icons for cursors
 const bucketCursor = "url(asserts/images/fill-drip-solid.png) 10 10, auto";
 const colorPickerCursor = "url(asserts/images/eye-dropper-solid.png) 10 10, auto";
-const moveElCursor = "url(asserts/images/expand-arrows-alt-solid.png) 10 10, auto";
+const moveCursor = "url(asserts/images/expand-arrows-alt-solid.png) 10 10, auto";
 const transferCursor = "url(asserts/images/exchange-alt-solid.png) 10 10, auto";
 
 // blocks
-const canvasEl = document.querySelector(".canvas");
-const palleteEl = document.querySelector(".pallete");
-const colorsEl = document.querySelector(".colors");
+let canvasEl = document.querySelector(".canvas");
+var palleteEl = document.querySelector(".pallete");
+var colorsEl = document.querySelector(".colors");
 
 // tools
 const paintBucketEl = document.querySelector("#paintBucket");
@@ -23,20 +23,31 @@ const blueColorEl = document.querySelector("#blue-color");
 
 
 var curr_color, prev_color;
-color = curr_color = "grey";
+curr_color = "#00ff37";
 prev_color = "green";
 var currentTool = "";
 
+
+
+// reset currentTool by Escape
+document.addEventListener('keydown', e => {
+  if (e.keyCode == 27) {
+    currentTool = "";
+    document.body.style.cursor = "";
+  }
+})
+
 let element;
 
-// events that are triggered when you click on the block of canvas
-canvasEl.addEventListener('click', e => {
+// events that are triggered when you click on the block of FIGURES
+document.body.addEventListener('mousedown', e => {
 
   console.log(e.clientX + ':' + e.clientY);
   // choose figure on canvas
   element = document.elementFromPoint(e.clientX, e.clientY);
 
-  //paint over
+
+  //  1) paint over
   if (currentTool == "paintBucket") {
     // if elem is on canvas
     if (element.parentElement === canvasEl) {
@@ -44,7 +55,7 @@ canvasEl.addEventListener('click', e => {
     }
   }
 
-  //take the color of the figure 
+  // 2) take the color of the figure 
   if (currentTool == "colorPicker") {
     // if elem is on canvas
     if (element.parentElement === canvasEl) {
@@ -52,30 +63,55 @@ canvasEl.addEventListener('click', e => {
     }
   }
 
-  //!!!!!!!!
-  // move
-  if (currentTool == "move") {
-    var rect = element.getBoundingClientRect()
-    var dx = e.pageX - rect.left,
-      dy = e.pageY - rect.top
+  //  3)  move
+  if (currentTool == "move" && element.parentElement === canvasEl) {
+    console.log(element, " ", element.parentElement);
+    element.onmousedown = function (e) { // 1. отследить нажатие
 
-    // element.style.backgroundColor = "silver";
-    document.body.addEventListener("click", function handler(e) {
+      // подготовить к перемещению
+      // 2. разместить на том же месте, но в абсолютных координатах
+      element.style.position = 'absolute';
+      moveAt(e);
+      // переместим в body, чтобы фигра был точно не внутри position:relative
+      // document.body.appendChild(element);
+      canvasEl.appendChild(element);
+      element.style.zIndex = 1000; // показывать фигру над другими элементами
 
-      console.log("element.style", element.style.offsetLeft + ':' + element.style.offsetTop);
-      console.log("dx dy", dx + ':' + e.clientY);
-      console.log("e.client", e.clientX + ':' + dy);
+      // передвинуть фигру под координаты курсора
+      // и сдвинуть на половину ширины/высоты для центрирования
+      function moveAt(e) {
+        element.style.left = e.pageX - element.offsetWidth / 2 + 'px';
+        element.style.top = e.pageY - element.offsetHeight / 2 + 'px';
+      }
 
-      element.style.offsetLeft = e.clientX - dx + 'px';
-      element.style.offsetTop = e.clientY - dy + 'px';
-      // document.removeEventListener('click', handler, true);
-      // event.stopPropagation();
-    });
+      // 3, перемещать по экрану
+      document.onmousemove = function (e) {
+        moveAt(e);
+      }
+
+      // 4. отследить окончание переноса
+      element.onmouseup = function () {
+        document.onmousemove = null;
+        element.onmouseup = null;
+      }
+      element.ondragstart = function () {
+        return false;
+      };
+    };
+  }
+
+  //  4) transform figure
+  if (currentTool == "transform" && element.parentElement === canvasEl) {
+    element.classList.toggle("transform-to-circle");
   }
 
 })
 
-// events that are triggered when you click on the block of choosing tools
+
+
+
+
+// events that are triggered when you click on the block of choosing TOOLS
 palleteEl.addEventListener('click', e => {
 
   if (e.target === paintBucketEl) {
@@ -98,27 +134,28 @@ palleteEl.addEventListener('click', e => {
     document.body.style.cursor = transferCursor;
   }
 
-  if (!currentTool) {
+  if (e.target === palleteEl) {
+    currentTool = "";
     document.body.style.cursor = "";
   }
-
+  console.log(currentTool, '  ', e.target);
 })
 
-// events that are triggered when you click on the block of choosing colors
+
+// events that are triggered when you click on the block of choosing COLORS
 colorsEl.addEventListener('click', e => {
-  if (currentTool == "colorPicker") {
-    if (e.target === currColorEl) {
-      refreshColor(curr_color);
-    }
-    if (e.target === prevColorEl) {
-      refreshColor(prev_color);
-    }
-    if (e.target === redColorEl) {
-      refreshColor("red");
-    }
-    if (e.target == blueColorEl) {
-      refreshColor("blue");
-    }
+
+  if (e.target === currColorEl) {
+    refreshColor(curr_color);
+  }
+  if (e.target === prevColorEl) {
+    refreshColor(prev_color);
+  }
+  if (e.target === redColorEl) {
+    refreshColor("red");
+  }
+  if (e.target == blueColorEl) {
+    refreshColor("blue");
   }
 
   //when you click on color palette do the standard cursor and the default action
@@ -126,13 +163,14 @@ colorsEl.addEventListener('click', e => {
 });
 
 
-// 
+// input type='color'
 var colorPickerInput = document.querySelector("#color");
 colorPickerInput.addEventListener("input", watchColorPicker, false);
 
 function watchColorPicker(event) {
   refreshColor(event.target.value);
 }
+
 
 function refreshColor(color) {
   prev_color = curr_color;
