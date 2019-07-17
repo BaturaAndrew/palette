@@ -4,16 +4,6 @@
   box-sizing: inherit;
 }
 
-
-body {
-  align-items: center;
-  font-family: Roboto;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 16px;
-  color: rgba(0, 0, 0, 0.541327);
-}
-
 * {
   list-style-type: none;
   text-decoration: none;
@@ -21,6 +11,12 @@ body {
 
 body {
   min-width: 1050px;
+  align-items: center;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.541327);
 }
 
 .menu {
@@ -52,6 +48,31 @@ body {
   height: 246px;
 }
 
+.icon {
+  display: inline-block;
+  height: 16px;
+  width: 16px;
+  position: relative;
+  margin-right: 5px;
+}
+
+.fill-drip {
+  background: url(../asserts/images/fill-drip-solid.png) no-repeat center/90%
+}
+
+.eye-dropper {
+  background: url(../asserts/images/eye-dropper-solid.png) no-repeat center/90%
+}
+
+.expand-arrows {
+  background: url(../asserts/images/expand-arrows-alt-solid.png) no-repeat center/90%
+}
+
+.exchange {
+  background: url(../asserts/images/exchange-alt-solid.png) no-repeat center/90%
+}
+
+
 .colors {
   margin-top: 100px;
 }
@@ -81,6 +102,8 @@ body {
 .pallete li,
 .colors li {
   margin: 20px 20px;
+  /* для выравнивания по вертикали */
+  display: flex;
 }
 
 .pallete li:first-child,
@@ -112,7 +135,7 @@ li:hover {
 }
 
 .curr-color {
-  background-color: #00ff37;
+  background-color: grey;
 }
 
 .prev-color {
