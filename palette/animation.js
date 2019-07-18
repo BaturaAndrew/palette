@@ -30,8 +30,9 @@ var state = {}
 
 // load colors from localStorage
 state = JSON.parse(localStorage.getItem('key'));
-refreshColor(state.currСolor, state.prevСolor);
-
+if (state) {
+  refreshColor(state.currСolor, state.prevСolor);
+}
 // events that are triggered when you click on the block of FIGURES
 document.body.addEventListener('mousedown', e => {
 
