@@ -21,20 +21,16 @@ const currColorEl = document.querySelector("#curr-color"),
   redColorEl = document.querySelector("#red-color"),
   blueColorEl = document.querySelector("#blue-color");
 
-var curr_color = "grey", //#00ff37
-  prev_color = "green",
+var currСolor = "grey", //#00ff37
+  prevСolor = "green",
   currentTool = "";
 
-
-// reset currentTool by Escape
-document.addEventListener('keydown', e => {
-  if (e.keyCode == 27) {
-    currentTool = "";
-    document.body.style.cursor = "";
-  }
-})
-
 var element;
+var state = {}
+
+// load colors from localStorage
+state = JSON.parse(localStorage.getItem('key'));
+refreshColor(state.currСolor, state.prevСolor);
 
 // events that are triggered when you click on the block of FIGURES
 document.body.addEventListener('mousedown', e => {
@@ -48,7 +44,7 @@ document.body.addEventListener('mousedown', e => {
   if (currentTool == "paintBucket") {
     // if elem is on canvas
     if (element.parentElement === canvasEl) {
-      element.style.backgroundColor = curr_color;
+      element.style.backgroundColor = currСolor;
     }
   }
 
@@ -56,48 +52,45 @@ document.body.addEventListener('mousedown', e => {
   if (currentTool == "colorPicker") {
     // if elem is on canvas
     if (element.parentElement === canvasEl) {
-      refreshColor(element.style.backgroundColor);
-      console.log(element.style.backgroundColor);
+      refreshColor(e.target.style.backgroundColor);
+
+      console.log(e.target, e.target.style.backgroundColor, e.target.classList.contains);
     }
   }
 
   //  3)  move
   if (currentTool == "move" && element.parentElement === canvasEl) {
 
-    // подготовить к перемещению
-    // 2. разместить на том же месте, но в абсолютных координатах
+    // prepare for relocation
+    // 2. place in same place but in absolute coordinates 
     element.style.position = 'absolute';
     moveAt(e);
-    // переместим в body, чтобы фигра был точно не внутри position:relative
-    // document.body.appendChild(element);
-    canvasEl.appendChild(element);
-    element.style.zIndex = 1000; // показывать фигру над другими элементами
+    // move it into body in order to figure not be into  position:relative  
+    // canvasEl.appendChild(element); ??
+    element.style.zIndex = 1000; // show the figure above the other elements
 
-    // 3, перемещать по экрану
+    // 3. move through screen
     document.onmousemove = function (e) {
       moveAt(e);
     }
 
-    // 4. отследить окончание переноса
+    // 4. track ending of the move 
     element.onmouseup = function () {
       document.onmousemove = null;
       element.onmouseup = null;
     }
 
-    // браузер имеет свой собственный Drag’ n’ Drop - отключаем
+    // browser has its own Drag’n’Drop - switch it off 
     element.ondragstart = function () {
       return false;
     };
-
   }
 
   //  4) transform figure
   if (currentTool == "transform" && element.parentElement === canvasEl) {
     element.classList.toggle("transform-to-circle");
   }
-
 })
-
 
 // events that are triggered when you click on the block of choosing TOOLS
 palleteEl.addEventListener('click', e => {
@@ -133,11 +126,13 @@ palleteEl.addEventListener('click', e => {
 // events that are triggered when you click on the block of choosing COLORS
 colorsEl.addEventListener('click', e => {
 
+
   if (e.target === currColorEl) {
-    refreshColor(curr_color);
+    console.log(e.target, e.target.style.backgroundColor);
+    refreshColor(currСolor);
   }
   if (e.target === prevColorEl) {
-    refreshColor(prev_color);
+    refreshColor(prevСolor);
   }
   if (e.target === redColorEl) {
     refreshColor("red");
@@ -145,7 +140,6 @@ colorsEl.addEventListener('click', e => {
   if (e.target == blueColorEl) {
     refreshColor("blue");
   }
-
   //when you click on color palette do the standard cursor and the default action
   resetAction();
 });
@@ -159,25 +153,32 @@ function watchColorPicker(event) {
   refreshColor(event.target.value);
 }
 
-
-function refreshColor(color) {
-  prev_color = curr_color;
-  curr_color = color;
-  currColorEl.childNodes[1].style.backgroundColor = curr_color;
-  prevColorEl.childNodes[1].style.backgroundColor = prev_color;
-  console.log("color", color, "prev color", prev_color, "curr color", curr_color)
+function refreshColor(crColor, prColor) {
+  // change color if it is not same with current color
+  if (!crColor) crColor = "grey";
+  if (crColor != currСolor) {
+    if (prColor) prevСolor = prColor
+    else prevСolor = currСolor;
+    currСolor = crColor;
+    currColorEl.childNodes[1].style.backgroundColor = currСolor;
+    prevColorEl.childNodes[1].style.backgroundColor = prevСolor;
+    console.log("color", crColor, "prev color", prevСolor, "curr color", currСolor)
+  }
+  // save state of colors in localstorage
+  state.currСolor = currСolor;
+  state.prevСolor = prevСolor;
+  localStorage.setItem('key', JSON.stringify(state));
 }
 
-// for now just reset the color choices
+// just reset the color choices
 function resetAction() {
   if (currentTool == "colorPicker") {
     currentTool == "";
     document.body.style.cursor = "";
   }
 }
-
-// передвинуть фигру под координаты курсора
-// и сдвинуть на половину ширины/высоты для центрирования
+// move the figure under the cursor coordinates 
+// and shifted by half width/height for centring 
 function moveAt(e) {
   element.style.left = e.pageX - element.offsetWidth / 2 + 'px';
   element.style.top = e.pageY - element.offsetHeight / 2 + 'px';
