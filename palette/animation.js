@@ -30,6 +30,13 @@ var state = {}
 
 // load colors from localStorage
 state = JSON.parse(localStorage.getItem('key'));
+
+if (!state) {
+  state = {
+    currСolor: "grey",
+    prevСolor: "green"
+  }
+}
 if (state) {
   refreshColor(state.currСolor, state.prevСolor);
 }

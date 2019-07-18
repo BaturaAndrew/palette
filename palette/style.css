@@ -78,7 +78,7 @@ body {
 }
 
 .canvas {
-  border: 1px solid red;
+  /* border: 1px solid red; */
   width: 725px;
   /* width: 100%; */
   margin-left: 50px;
@@ -88,8 +88,6 @@ body {
 }
 
 .figure {
-  border: 1px solid blue;
-  /* display: inline-block; */
   position: relative;
   width: 220px;
   height: 220px;
@@ -149,7 +147,6 @@ li:hover {
 .blue-color {
   background-color: blue;
 }
-
 
 .transform-to-circle {
   border-radius: 999px;
