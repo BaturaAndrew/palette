@@ -4,29 +4,23 @@
   box-sizing: inherit;
 }
 
-body {
-
-  font-family: Roboto;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 16px;
-  align-items: center;
-
-  color: rgba(0, 0, 0, 0.541327);
-}
-
 * {
   list-style-type: none;
   text-decoration: none;
 }
 
 body {
-  min-width: 980px;
+  min-width: 1050px;
+  align-items: center;
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.541327);
 }
 
 .menu {
-  border: 1px solid red;
-
+  margin-top: 30px;
 }
 
 .menu h1 {
@@ -39,22 +33,45 @@ body {
 }
 
 .wrapper {
-  border: 1px solid red;
   margin-top: 100px;
   display: flex;
   justify-content: space-between;
 }
 
-
 .pallete,
 .colors {
-  border: 1px solid red;
+  border-left: 1px solid red;
+  border-top: 1px solid red;
   box-shadow: 10px 5px 5px red;
   margin-left: 40px;
   width: 228px;
   height: 246px;
-
 }
+
+.icon {
+  display: inline-block;
+  height: 16px;
+  width: 16px;
+  position: relative;
+  margin-right: 5px;
+}
+
+.fill-drip {
+  background: url(../asserts/images/fill-drip-solid.png) no-repeat center/90%
+}
+
+.eye-dropper {
+  background: url(../asserts/images/eye-dropper-solid.png) no-repeat center/90%
+}
+
+.expand-arrows {
+  background: url(../asserts/images/expand-arrows-alt-solid.png) no-repeat center/90%
+}
+
+.exchange {
+  background: url(../asserts/images/exchange-alt-solid.png) no-repeat center/90%
+}
+
 
 .colors {
   margin-top: 100px;
@@ -63,25 +80,77 @@ body {
 .canvas {
   border: 1px solid red;
   width: 725px;
+  /* width: 100%; */
+  margin-left: 50px;
   height: 731px;
-  display: flex;
-  flex-wrap: wrap;
+  /* display: flex; */
+  /* flex-wrap: wrap; */
 }
 
-.block {
+.figure {
   border: 1px solid blue;
-  width: 30%;
-  height: 30%;
+  /* display: inline-block; */
+  position: relative;
+  width: 220px;
+  height: 220px;
   margin: 1px 1px;
   background-color: grey;
+  float: left;
+  z-index: 1;
 }
 
 .pallete li,
 .colors li {
   margin: 20px 20px;
+  /* для выравнивания по вертикали */
+  display: flex;
+}
+
+.pallete li:first-child,
+.colors li:first-child {
+  margin-top: 50px;
 }
 
 .pallete li i,
 .colors li i {
   margin-right: 6px;
+}
+
+li:hover {
+  background-color: lavender;
+}
+
+.pallete li:hover,
+.colors li:hover {
+  cursor: pointer;
+}
+
+.circle {
+  width: 13px;
+  height: 13px;
+  border: 1px solid black;
+  border-radius: 13px;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.curr-color {
+  background-color: grey;
+}
+
+.prev-color {
+  background-color: green;
+}
+
+.red-color {
+  background-color: red;
+}
+
+.blue-color {
+  background-color: blue;
+}
+
+
+.transform-to-circle {
+  border-radius: 999px;
 }

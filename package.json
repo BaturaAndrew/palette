@@ -1,0 +1,26 @@
+{
+  "name": "palette",
+  "version": "1.0.0",
+  "description": "code jam palette",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint --ignore-path .gitignore ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BaturaAndrew/palette.git"
+  },
+  "keywords": [
+    "codejam",
+    "dom-pallete"
+  ],
+  "author": "Batura Andrew",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/BaturaAndrew/palette/issues"
+  },
+  "homepage": "https://github.com/BaturaAndrew/palette/#readme",
+  "dependencies": {
+    "eslint": "^6.0.1"
+  }
+}
