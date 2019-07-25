@@ -78,23 +78,63 @@ body {
 }
 
 .canvas {
-  /* border: 1px solid red; */
+  border: 1px solid red;
   width: 725px;
-  /* width: 100%; */
   margin-left: 50px;
   height: 731px;
-  /* display: flex; */
-  /* flex-wrap: wrap; */
 }
 
 .figure {
-  position: relative;
+  position: absolute;
   width: 220px;
   height: 220px;
-  margin: 1px 1px;
+  margin: 10px 10px;
   background-color: grey;
-  float: left;
   z-index: 1;
+}
+
+.block1 {
+  left: 800px;
+  top: 156px;
+}
+
+.block2 {
+  right: 240px;
+}
+
+.block3 {
+  right: 0px;
+}
+
+.block4 {
+  top: 400px;
+  right: 480px;
+}
+
+.block5 {
+  top: 400px;
+  right: 240px;
+}
+
+.block6 {
+  top: 400px;
+  right: 0px;
+}
+
+.block7 {
+
+  top: 640px;
+  right: 480px;
+}
+
+.block8 {
+  top: 640px;
+  right: 240px;
+}
+
+.block9 {
+  top: 640px;
+  right: 0px;
 }
 
 .pallete li,
@@ -150,4 +190,8 @@ li:hover {
 
 .transform-to-circle {
   border-radius: 999px;
+}
+
+.active {
+  background-color: lavender;
 }
