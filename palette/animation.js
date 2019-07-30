@@ -1,4 +1,4 @@
-//VARABLES
+import State from './State.js'
 
 // icons for cursors
 const bucketCursor = "url(asserts/images/fill-drip-solid.png) 10 10, auto",
@@ -7,14 +7,15 @@ const bucketCursor = "url(asserts/images/fill-drip-solid.png) 10 10, auto",
   transferCursor = "url(asserts/images/exchange-alt-solid.png) 10 10, auto";
 
 // blocks
-var palleteEl = document.querySelector(".pallete"),
+const palleteEl = document.querySelector(".pallete"),
   colorsEl = document.querySelector(".colors");
 
 // tools
 const paintBucketEl = document.querySelector(".paintBucket"),
   colorPickerEl = document.querySelector(".colorPicker"),
   moveEl = document.querySelector(".move"),
-  transformEl = document.querySelector(".transform");
+  transformEl = document.querySelector(".transform"),
+  saveStateButton = document.querySelector(".save-state");
 
 //  colors
 const currColorEl = document.querySelector(".curr-color__item"),
@@ -29,18 +30,15 @@ var currСolor = "grey", //#00ff37
 // input type='color'
 var colorPickerInput = document.querySelector(".color");
 
-var figures;
-figures = document.querySelectorAll(".figure");
+var figures = document.querySelectorAll(".figure");
+// convert to array
 figures = Array.prototype.slice.call(figures);
 
-var state = {}
+// figures change in class State
+const controlState = new State(figures);
 
-
-// load colors from localStorage
-state = JSON.parse(localStorage.getItem('key'));
-
-loadState();
-
+controlState.loadState();
+refreshColor(controlState.state.currСolor, controlState.state.prevСolor);
 
 // PANEL
 
@@ -80,18 +78,17 @@ transformEl.addEventListener('click', () => {
 /** 
  *  events that are triggered when you click on the block of FIGURES
  **/
+
 figures.map(elem => {
   elem.addEventListener('mousedown', e => {
     //  1) paint over
     if (currentTool == "paintBucket") {
       elem.style.backgroundColor = currСolor;
     }
-
     // 2) take the color of the figure 
     if (currentTool == "colorPicker") {
       refreshColor(elem.style.backgroundColor);
     }
-
     //  3)  move
     if (currentTool == "move") {
       moveFigure(elem, e);
@@ -100,56 +97,11 @@ figures.map(elem => {
     if (currentTool == "transform") {
       elem.classList.toggle("transform-to-circle");
     }
-
   });
+
 });
 
-function moveFigure(figure, e) {
-
-  // prepare for relocation
-  // 2. place in same place but in absolute coordinates 
-  figure.style.position = 'absolute';
-  moveAt(e);
-  // move it into body in order to figure not be into  position:relative  
-  // canvasEl.appendChild(element); ??
-  figure.style.zIndex = 1000; // show the figure above the other elements
-
-  // 3. move through screen
-  document.onmousemove = function (e) {
-    moveAt(e);
-  }
-
-  // 4. track ending of the move 
-  figure.onmouseup = function () {
-    document.onmousemove = null;
-    figure.onmouseup = null;
-  }
-
-  // browser has its own Drag’n’Drop - switch it off 
-  figure.ondragstart = function () {
-    return false;
-  };
-
-  // move the figure under the cursor coordinates 
-  // and shifted by half width/height for centring 
-  function moveAt(e) {
-    figure.style.left = e.pageX - figure.offsetWidth / 2 + 'px';
-    figure.style.top = e.pageY - figure.offsetHeight / 2 + 'px';
-  }
-
-}
-
-
-function clearToolState() {
-  let childs = palleteEl.children
-  childs = Array.prototype.slice.call(childs);
-  childs.map(elem => {
-    elem.classList.remove("active");
-  });
-
-}
-// CHOOSE COLOR PANEL
-
+// CHOOSE COLOR PANEL 
 /**  
  *  events that are triggered when you click on the block of choosing COLORS
  **/
@@ -163,7 +115,7 @@ colorsEl.addEventListener('click', e => {
   if (e.target === redColorEl) {
     refreshColor("red");
   }
-  if (e.target == blueColorEl) {
+  if (e.target === blueColorEl) {
     refreshColor("blue");
   }
   //when you click on color palette do the standard cursor and the default action
@@ -171,10 +123,69 @@ colorsEl.addEventListener('click', e => {
 });
 
 
-// COLOR PICKER
-
+// COLOR PICKER 
 colorPickerInput.addEventListener("input", watchColorPicker, false);
 
+
+// SAVE IN LOCALSTORE
+saveStateButton.addEventListener("click", () => {
+  controlState.saveState([currСolor, prevСolor]);
+})
+
+
+/** 
+ *FUNCTIONS
+ */
+function moveFigure(figure, e) {
+
+  var coords = getCoords(figure);
+  var shiftX = e.pageX - coords.left;
+  var shiftY = e.pageY - coords.top;
+  var sec = new Date(),
+    // to show always above  another figure
+    zIndexAdd = sec.getMinutes() + sec.getSeconds();
+  figure.style.position = 'absolute';
+  figure.style.zIndex = 100 + zIndexAdd;
+
+  moveAt(e);
+
+  document.onmousemove = function (e) {
+    moveAt(e);
+  }
+
+  figure.onmouseup = function () {
+    document.onmousemove = null;
+    figure.onmouseup = null;
+  }
+
+  // browser has its own Drag’n’Drop - switch it off 
+  figure.ondragstart = function () {
+    return false;
+  };
+
+  function moveAt(e) {
+    figure.style.left = e.pageX - shiftX + 'px';
+    figure.style.top = e.pageY - shiftY + 'px';
+  }
+
+  function getCoords(elem) {
+    var box = elem.getBoundingClientRect();
+    return {
+      top: box.top + pageYOffset,
+      left: box.left + pageXOffset
+    };
+  }
+
+}
+
+function clearToolState() {
+  let childs = palleteEl.children
+  childs = Array.prototype.slice.call(childs);
+  childs.map(elem => {
+    elem.classList.remove("active");
+  });
+
+}
 
 function watchColorPicker(event) {
   refreshColor(event.target.value);
@@ -190,8 +201,6 @@ function refreshColor(crColor, prColor) {
     currColorEl.childNodes[1].style.backgroundColor = currСolor;
     prevColorEl.childNodes[1].style.backgroundColor = prevСolor;
   }
-  // save state of colors in localstorage
-  saveState();
 }
 
 // just reset the color choices
@@ -199,25 +208,5 @@ function resetAction() {
   if (currentTool == "colorPicker") {
     currentTool == "";
     document.body.style.cursor = "";
-  }
-}
-
-
-function saveState() {
-  // save state of colors in localstorage
-  state.currСolor = currСolor;
-  state.prevСolor = prevСolor;
-  localStorage.setItem('key', JSON.stringify(state));
-}
-
-function loadState() {
-  if (!state) {
-    state = {
-      currСolor: "grey",
-      prevСolor: "green"
-    }
-  }
-  if (state) {
-    refreshColor(state.currСolor, state.prevСolor);
   }
 }

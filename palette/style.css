@@ -33,7 +33,7 @@ body {
 }
 
 .wrapper {
-  margin-top: 100px;
+  margin-top: 5px;
   display: flex;
   justify-content: space-between;
 }
@@ -78,63 +78,62 @@ body {
 }
 
 .canvas {
-  border: 1px solid red;
   width: 725px;
-  margin-left: 50px;
-  height: 731px;
+  margin-right: 50px;
+  height: 650px;
 }
 
 .figure {
   position: absolute;
-  width: 220px;
-  height: 220px;
-  margin: 10px 10px;
+  width: 200px;
+  height: 200px;
   background-color: grey;
   z-index: 1;
 }
 
 .block1 {
-  left: 800px;
-  top: 156px;
+  top: 70px;
+  left: 790px;
 }
 
 .block2 {
-  right: 240px;
+  top: 70px;
+  right: 310px;
 }
 
 .block3 {
-  right: 0px;
+  top: 70px;
+  right: 80px;
 }
 
 .block4 {
-  top: 400px;
-  right: 480px;
+  top: 285px;
+  right: 545px;
 }
 
 .block5 {
-  top: 400px;
-  right: 240px;
+  top: 285px;
+  right: 310px;
 }
 
 .block6 {
-  top: 400px;
-  right: 0px;
+  top: 285px;
+  right: 80px;
 }
 
 .block7 {
-
-  top: 640px;
-  right: 480px;
+  top: 500px;
+  right: 545px;
 }
 
 .block8 {
-  top: 640px;
-  right: 240px;
+  top: 500px;
+  right: 310px;
 }
 
 .block9 {
-  top: 640px;
-  right: 0px;
+  top: 500px;
+  right: 80px;
 }
 
 .pallete li,
@@ -149,19 +148,14 @@ body {
   margin-top: 50px;
 }
 
-.pallete li i,
-.colors li i {
-  margin-right: 6px;
-}
-
-li:hover {
+.panel li:hover,
+.panel li:focus {
   background-color: lavender;
-}
-
-.pallete li:hover,
-.colors li:hover {
+  outline: none;
+  /* убрать рамку */
   cursor: pointer;
 }
+
 
 .circle {
   width: 13px;
