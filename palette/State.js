@@ -27,7 +27,7 @@ export default class State {
     if (!this.state) {
       this.state = this.initialState(this.figures, this.state);
     } else {
-      this.applySaveState();
+      this.applySavedState();
     }
   }
 
@@ -51,7 +51,7 @@ export default class State {
     return state;
   }
 
-  applySaveState() {
+  applySavedState() {
     this.figures.map((figure, i) => {
 
       figure.style.left = this.state.location[i].left + "px";

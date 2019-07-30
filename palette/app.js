@@ -47,32 +47,27 @@ refreshColor(controlState.state.currСolor, controlState.state.prevСolor);
  **/
 
 paintBucketEl.addEventListener('click', () => {
-  clearToolState();
-  currentTool = "paintBucket"; // change current tool
-  document.body.style.cursor = bucketCursor; // change cursor type
-  paintBucketEl.classList.add("active");
+  setAction("paintBucket", bucketCursor, paintBucketEl);
 });
 
 colorPickerEl.addEventListener('click', () => {
-  clearToolState();
-  currentTool = "colorPicker";
-  document.body.style.cursor = colorPickerCursor;
-  colorPickerEl.classList.add("active");
+  setAction("colorPicker", colorPickerCursor, colorPickerEl);
 });
 
 moveEl.addEventListener('click', () => {
-  clearToolState();
-  currentTool = "move";
-  document.body.style.cursor = moveCursor;
-  moveEl.classList.add("active");
+  setAction("move", moveCursor, moveEl);
 });
 
 transformEl.addEventListener('click', () => {
-  clearToolState();
-  currentTool = "transform";
-  document.body.style.cursor = transferCursor;
-  transformEl.classList.add("active");
+  setAction("transform", transferCursor, transformEl);
 });
+
+function setAction(tool, cursor, toolEl) {
+  clearToolState();
+  currentTool = tool; // change current tool
+  document.body.style.cursor = cursor; // change cursor type
+  toolEl.classList.add("active");
+}
 
 //FIGURES
 /** 
@@ -126,10 +121,36 @@ colorsEl.addEventListener('click', e => {
 // COLOR PICKER 
 colorPickerInput.addEventListener("input", watchColorPicker, false);
 
+function watchColorPicker(event) {
+  refreshColor(event.target.value);
+}
 
 // SAVE IN LOCALSTORE
 saveStateButton.addEventListener("click", () => {
   controlState.saveState([currСolor, prevСolor]);
+})
+
+// HOTKEYS
+document.addEventListener("keydown", (e) => {
+  if (e.keyCode == 83 && e.altKey) { // save using letters Alt + S
+    controlState.saveState([currСolor, prevСolor]);
+  }
+  if (e.keyCode == 80) { // paint using a letter P
+    setAction("paintBucket", bucketCursor, paintBucketEl);
+  }
+  if (e.keyCode == 67) { // C
+    setAction("colorPicker", colorPickerCursor, colorPickerEl);
+  }
+  if (e.keyCode == 77) { // M
+    setAction("move", moveCursor, moveEl);
+  }
+  if (e.keyCode == 84) { // T
+    setAction("transform", transferCursor, transformEl);
+  }
+  if (e.keyCode == 27) { // Esc
+    currentTool == "";
+    document.body.style.cursor = "";
+  }
 })
 
 
@@ -185,10 +206,6 @@ function clearToolState() {
     elem.classList.remove("active");
   });
 
-}
-
-function watchColorPicker(event) {
-  refreshColor(event.target.value);
 }
 
 function refreshColor(crColor, prColor) {

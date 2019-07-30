@@ -140,5 +140,5 @@ table {
 
 * {
   list-style-type: none;
-  text-decoration: none;
+  /* text-decoration: none; */
 }
